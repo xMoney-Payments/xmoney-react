@@ -6,6 +6,22 @@ The format follows [Keep a Changelog](https://keepachangelog.com/en/1.1.0/), and
 
 ## [Unreleased]
 
+## [0.0.2] - 2026-10-28
+
+### Changed
+
+- Requires `@xmoney/xmoney-js` `^0.0.2`.
+
+### Added
+
+- `customerDetails.fields` selects which blocks the checkout collects (`fullName`, `email`, `phone`, `address`) and replaces the server field list. `PaymentForm`, `PaymentCard`, `ApplePay`, and `GooglePay` accept it.
+- `customerDetails.defaultValues` prefills the card form on `PaymentForm` and `PaymentCard`.
+- Type re-exports `CustomerDetailsFields` and `CustomerDetailsDefaultValues`.
+
+### Behavior
+
+- Changing `customerDetails.fields` or `customerDetails.defaultValues` remounts the widget, like any other `customerDetails` change.
+
 ## [0.0.1] - 2026-10-20
 
 First public release.

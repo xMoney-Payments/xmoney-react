@@ -40,4 +40,24 @@ describe('wallets', () => {
     await waitFor(() => expect(sdk.googlePay).toHaveBeenCalledTimes(2));
     expect(sdk.destroy).toHaveBeenCalled();
   });
+
+  it('passes customerDetails fields to Apple Pay and Google Pay', async () => {
+    render(
+      <>
+        <ApplePay {...props} customerDetails={{ applePay: true, fields: { email: true, phone: true } }} />
+        <GooglePay {...props} customerDetails={{ googlePay: true, fields: { address: true } }} />
+      </>
+    );
+
+    await waitFor(() => expect(sdk.applePay).toHaveBeenCalledTimes(1));
+    await waitFor(() => expect(sdk.googlePay).toHaveBeenCalledTimes(1));
+    expect(sdk.applePay.mock.calls[0]?.[0].customerDetails).toEqual({
+      applePay: true,
+      fields: { email: true, phone: true },
+    });
+    expect(sdk.googlePay.mock.calls[0]?.[0].customerDetails).toEqual({
+      googlePay: true,
+      fields: { address: true },
+    });
+  });
 });

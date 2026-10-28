@@ -30,4 +30,42 @@ describe('PaymentCard', () => {
     expect(sdk.destroy).toHaveBeenCalled();
     expect(sdk.paymentCard.mock.calls[1]?.[0].customerDetails).toEqual({ card: true });
   });
+
+  it('passes customerDetails fields and defaultValues to the factory', async () => {
+    const customerDetails = {
+      card: true,
+      fields: { fullName: true, email: true, address: true },
+      defaultValues: { fullName: 'Ana Pop', country: 'RO' },
+    };
+
+    render(<PaymentCard {...props} customerDetails={customerDetails} />);
+
+    await waitFor(() => expect(sdk.paymentCard).toHaveBeenCalledTimes(1));
+    expect(sdk.paymentCard.mock.calls[0]?.[0].customerDetails).toEqual(customerDetails);
+  });
+
+  it('remounts when customerDetails defaultValues changes', async () => {
+    const view = render(
+      <PaymentCard {...props} customerDetails={{ card: true, defaultValues: { fullName: 'Ana Pop' } }} />
+    );
+    await waitFor(() => expect(sdk.paymentCard).toHaveBeenCalledTimes(1));
+
+    view.rerender(
+      <PaymentCard {...props} customerDetails={{ card: true, defaultValues: { fullName: 'Ion Pop' } }} />
+    );
+
+    await waitFor(() => expect(sdk.paymentCard).toHaveBeenCalledTimes(2));
+    expect(sdk.destroy).toHaveBeenCalled();
+  });
+
+  it('does not remount when customerDetails is rebuilt with the same values', async () => {
+    const view = render(<PaymentCard {...props} customerDetails={{ card: true, fields: { email: true } }} />);
+    await waitFor(() => expect(sdk.paymentCard).toHaveBeenCalledTimes(1));
+
+    view.rerender(<PaymentCard {...props} customerDetails={{ card: true, fields: { email: true } }} />);
+
+    await Promise.resolve();
+    expect(sdk.paymentCard).toHaveBeenCalledTimes(1);
+    expect(sdk.destroy).not.toHaveBeenCalled();
+  });
 });

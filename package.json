@@ -1,6 +1,6 @@
 {
   "name": "@xmoney/react",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "React components and hooks for the xMoney Checkout SDK",
   "license": "MIT",
   "type": "module",
@@ -50,7 +50,7 @@
     "example": "npm --prefix examples run dev"
   },
   "dependencies": {
-    "@xmoney/xmoney-js": "^0.0.1"
+    "@xmoney/xmoney-js": "^0.0.2"
   },
   "peerDependencies": {
     "react": ">=18 <20",

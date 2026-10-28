@@ -28,6 +28,25 @@ Changing `orderPayload` and `orderChecksum` calls `updateOrder`. On `PaymentForm
 
 `ApplePay` and `GooglePay` remount when `options.locale` or `options.appearance` changes. Every widget remounts when `publicKey` or `customerDetails` changes. `PaymentForm` and `PaymentCard` also remount when `card` changes, and `PaymentForm` remounts when `paymentMethods` changes. Changing a callback does not remount.
 
+## Customer details
+
+`customerDetails.card`, `applePay`, and `googlePay` turn collection on for that method. `customerDetails.fields` picks the blocks the checkout collects (`fullName`, `email`, `phone`, `address`). `customerDetails.defaultValues` prefills the card form on `PaymentForm` and `PaymentCard`. `ApplePay` and `GooglePay` accept `fields` but not `defaultValues`.
+
+```tsx
+<PaymentForm
+  publicKey={publicKey}
+  orderPayload={orderPayload}
+  orderChecksum={orderChecksum}
+  customerDetails={{
+    card: true,
+    fields: { fullName: true, email: true, address: true },
+    defaultValues: { fullName: 'Ana Pop', email: 'ana@example.com', country: 'RO' },
+  }}
+/>
+```
+
+`defaultValues` is part of `customerDetails`, so changing it remounts the widget. Pass values that are stable while the customer is typing. Do not bind them to live input state.
+
 Locales are `en-US`, `el-GR`, `ro-RO`, `bg-BG`, `hu-HU`, and `pl-PL`.
 
 ## `PaymentForm`
